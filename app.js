@@ -1,6 +1,8 @@
 const api = `zEE5nKn5wIFmy03pO7b`;
 const search = document.querySelector('form');
 const stEle = document.querySelector('.streets');
+const headerEle = document.getElementById('street-name');
+const bodyEle = document.querySelector('tbody');
 
 search.onsubmit = event => {
   const input = event.target.querySelector('input');
@@ -18,6 +20,9 @@ function searchStreet(query) {
       }
     })
     .then(data => {
+      stEle.textContent = '';
+      bodyEle.textContent = '';
+      headerEle.textContent = '';
       streetDetails(data.streets);
     })
 }
@@ -61,5 +66,32 @@ function getStreet(choosenStreet) {
       promiseArray.push(allResults);
     }
     insertStreetsIntoDom(promiseArray);
+  })
+}
+
+function insertStreetsIntoDom(promiseArray) {
+  Promise.all(promiseArray).then(scheduleStop => {
+    headerEle.insertAdjacentHTML('afterbegin',`
+    Displaying results for ${scheduleStop[0]["stop-schedule"].stop.street.name}`);
+    for (let st of scheduleStop) {
+      let time = new Date 
+      (`${st['stop-schedule']['route-schedules'][0]['scheduled-stops'][0].times.departure.scheduled}`);
+      const todayTime = time.toLocaleDateString('en-US', {
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12:true,
+      });
+
+      bodyEle.insertAdjacentHTML(
+        "afterbegin", `
+          <tr>
+            <td>${st["stop-schedule"].stop.street.name}</td>
+            <td>${st["stop-schedule"].stop["cross-street"].name}</td>
+            <td>${st["stop-schedule"].stop.direction}</td>
+            <td>${st["stop-schedule"]["route-schedules"][0].route.key}</td>
+            <td> ${todayTime}</td>
+          </tr>`
+      );
+    }
   })
 }
