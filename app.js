@@ -46,7 +46,19 @@ function getStreet(choosenStreet) {
       throw new Error('we have a problem');
     }
   })
-  .then(data => {
-    console.log(data)
+  .then(busStops => {
+    for(let stop of busStops.stops) {
+      fetch(`https://api.winnipegtransit.com/v3/stops/${stop.key}/schedule.json?api-key=${api}`)
+      .then(response => {
+        if(response.ok) {
+          return response.json();
+        } else {
+          throw new Error('we have a problem');
+        }
+      })
+      .then((data)=>{
+        console.log(data)
+      })
+    }
   })
 }
