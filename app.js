@@ -31,3 +31,8 @@ function streetDetails(street) {
     `<a href="#" data-street-key=${st.key}>${st.name}</a>`)
   });
 }
+
+stEle.onclick = event => {
+  const streetEle = event.target.closest('a');
+  getStreet(streetEle.dataset.streetKey)
+}
