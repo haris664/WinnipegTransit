@@ -38,6 +38,8 @@ stEle.onclick = event => {
 }
 
 function getStreet(choosenStreet) {
+  let allResults;
+  let promiseArray = [];
   fetch(`https://api.winnipegtransit.com/v3/stops.json?street=${choosenStreet}&api-key=${api}`)
   .then(response => {
     if(response.ok) {
@@ -48,17 +50,16 @@ function getStreet(choosenStreet) {
   })
   .then(busStops => {
     for(let stop of busStops.stops) {
-      fetch(`https://api.winnipegtransit.com/v3/stops/${stop.key}/schedule.json?api-key=${api}`)
+      allResults = fetch(`https://api.winnipegtransit.com/v3/stops/${stop.key}/schedule.json?api-key=${api}`)
       .then(response => {
         if(response.ok) {
           return response.json();
         } else {
           throw new Error('we have a problem');
-        }
+        } 
       })
-      .then((data)=>{
-        console.log(data)
-      })
+      promiseArray.push(allResults);
     }
+    insertStreetsIntoDom(promiseArray);
   })
 }
