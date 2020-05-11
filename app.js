@@ -36,3 +36,17 @@ stEle.onclick = event => {
   const streetEle = event.target.closest('a');
   getStreet(streetEle.dataset.streetKey)
 }
+
+function getStreet(choosenStreet) {
+  fetch(`https://api.winnipegtransit.com/v3/stops.json?street=${choosenStreet}&api-key=${api}`)
+  .then(response => {
+    if(response.ok) {
+      return response.json();
+    } else {
+      throw new Error('we have a problem');
+    }
+  })
+  .then(data => {
+    console.log(data)
+  })
+}
