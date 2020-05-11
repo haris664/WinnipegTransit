@@ -6,3 +6,17 @@ search.onsubmit = event => {
   searchStreet(input.value);
   event.preventDefault();
 }
+
+function searchStreet(query) {
+  fetch(`https://api.winnipegtransit.com/v3/streets.json?name=${query}&usage=long&api-key=${api}`)
+    .then(response => {
+      if(response.ok) {
+        return response.json();
+      } else {
+        throw new Error('We have a problem');
+      }
+    })
+    .then(data => {
+      console.log(data)
+    })
+}
