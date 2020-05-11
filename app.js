@@ -36,3 +36,30 @@ stEle.onclick = event => {
   const streetEle = event.target.closest('a');
   getStreet(streetEle.dataset.streetKey)
 }
+
+function getStreet(choosenStreet) {
+  let allResults;
+  let promiseArray = [];
+  fetch(`https://api.winnipegtransit.com/v3/stops.json?street=${choosenStreet}&api-key=${api}`)
+  .then(response => {
+    if(response.ok) {
+      return response.json();
+    } else {
+      throw new Error('we have a problem');
+    }
+  })
+  .then(busStops => {
+    for(let stop of busStops.stops) {
+      allResults = fetch(`https://api.winnipegtransit.com/v3/stops/${stop.key}/schedule.json?api-key=${api}`)
+      .then(response => {
+        if(response.ok) {
+          return response.json();
+        } else {
+          throw new Error('we have a problem');
+        } 
+      })
+      promiseArray.push(allResults);
+    }
+    insertStreetsIntoDom(promiseArray);
+  })
+}
