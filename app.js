@@ -45,6 +45,7 @@ stEle.onclick = event => {
 function getStreet(choosenStreet) {
   let allResults;
   let promiseArray = [];
+
   fetch(`https://api.winnipegtransit.com/v3/stops.json?street=${choosenStreet}&api-key=${api}`)
   .then(response => {
     if(response.ok) {
@@ -76,7 +77,7 @@ function insertStreetsIntoDom(promiseArray) {
     for (let st of scheduleStop) {
       let time = new Date 
       (`${st['stop-schedule']['route-schedules'][0]['scheduled-stops'][0].times.departure.scheduled}`);
-      const todayTime = time.toLocaleDateString('en-US', {
+      const todayTime = time.toLocaleString('en-US', {
         hour: 'numeric',
         minute: 'numeric',
         hour12:true,
