@@ -3,9 +3,9 @@
 
 
 # Technologies
-HTML
-CSS
-JS
+HTML,
+CSS,
+JavaScript,
 Winnipeg Transit API
 
 # Specification:
